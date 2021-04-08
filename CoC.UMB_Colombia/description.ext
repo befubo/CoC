@@ -1,0 +1,19 @@
+class Header
+{
+gameType = Coop;
+minPlayers = 1;
+maxPlayers = 4;
+};
+
+disabledAI=1;
+Respawn = 3;
+RespawnDelay = 3;
+RespawnDialog = 0;
+respawnButton = 1;
+enableDebugConsole = 1; 
+Saving = 0;
+Debriefing = 1;
+OnLoadIntroTime = 0;
+OnLoadMissionTime = 0;
+
+cba_settings_hasSettingsFile = 1;
