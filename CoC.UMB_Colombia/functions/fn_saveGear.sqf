@@ -36,7 +36,10 @@ _player_backpack = backpack _unit;
 _player_backpack_inventory = backpackItems _unit;
 _backpack = [_player_backpack,_player_backpack_inventory];
 
-_playerSaveGame = [_weapons, _items, _magazines, _backpacks, _primary, _handgun, _secondary, _uniform, _vest, _backpack];
+_player_headgear = headgear  _unit;
+_headgear = [_player_headgear];
+
+_playerSaveGame = [_weapons, _items, _magazines, _backpacks, _primary, _handgun, _secondary, _uniform, _vest, _backpack, _headgear];
 profileNamespace setVariable [_uid_unit, _playerSaveGame];
 
 hint format ["%1\n%2",_uid_unit,_playerSaveGame];
