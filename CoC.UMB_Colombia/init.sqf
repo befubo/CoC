@@ -1,5 +1,3 @@
-sleep 5;
-
 if (!isNil "z_1") then {
 	z_1 setVariable ["standing_blufor", 1, true];
 	z_1 setVariable ["standing_grenfor", 1, true];

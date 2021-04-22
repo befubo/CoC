@@ -8,7 +8,7 @@ class EditorData
 	toggles=521;
 	class ItemIDProvider
 	{
-		nextID=496;
+		nextID=503;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,14 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=10;
+		nextID=11;
 	};
 	class Camera
 	{
-		pos[]={4700.4224,42.377312,10944.103};
-		dir[]={0.68938023,-0.67880338,0.25297827};
-		up[]={0.63725257,0.73431778,0.23384975};
-		aside[]={0.34450465,-3.7343125e-007,-0.93879241};
+		pos[]={4623.0991,39.707764,11018.818};
+		dir[]={-0.45824552,-0.65331143,0.60265678};
+		up[]={-0.39543161,0.75708926,0.52004772};
+		aside[]={0.79601812,1.4901161e-008,0.60527277};
 	};
 };
 binarizationWanted=0;
@@ -6958,19 +6958,20 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={4748.8701,30.696228,10862.695};
+						position[]={4748.8701,30.695843,10862.696};
 						angles[]={0,2.4890838,0};
 					};
 					side="Civilian";
-					flags=7;
+					flags=2;
 					class Attributes
 					{
 						name="p_3";
 						description="Mechaniker";
 						isPlayable=1;
 					};
-					id=251;
-					type="C_man_polo_2_F";
+					id=497;
+					type="C_man_1";
+					atlOffset=0.70700073;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -7019,6 +7020,7 @@ class Mission
 			{
 			};
 			id=250;
+			atlOffset=0.70700073;
 		};
 		class Item170
 		{
@@ -7036,7 +7038,7 @@ class Mission
 						angles[]={0,0.68661255,0};
 					};
 					side="Civilian";
-					flags=7;
+					flags=6;
 					class Attributes
 					{
 						init="call{this allowDamage false;}";
@@ -7045,8 +7047,8 @@ class Mission
 						isPlayer=1;
 						isPlayable=1;
 					};
-					id=253;
-					type="C_man_polo_4_F";
+					id=498;
+					type="C_man_1";
 					atlOffset=0.00031852722;
 					class CustomAttributes
 					{
@@ -7110,19 +7112,20 @@ class Mission
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={4706.124,30.696228,10949.664};
+						position[]={4706.124,30.695843,10949.664};
 						angles[]={0,5.5621548,0};
 					};
 					side="Civilian";
-					flags=7;
+					flags=2;
 					class Attributes
 					{
 						name="p_2";
 						description="Sanitäter";
 						isPlayable=1;
 					};
-					id=255;
-					type="C_man_polo_3_F";
+					id=496;
+					type="C_man_1";
+					atlOffset=0.70700073;
 					class CustomAttributes
 					{
 						class Attribute0
@@ -7171,6 +7174,7 @@ class Mission
 			{
 			};
 			id=254;
+			atlOffset=0.70700073;
 		};
 		class Item172
 		{
@@ -10797,8 +10801,7 @@ class Mission
 			side="Empty";
 			class Attributes
 			{
-				init="call{this addAction [""Save Gear"",{params [""_target"", ""_caller"", ""_actionId"", ""_arguments""]; [_caller,_target] remoteExec [""COC_fnc_saveGear"", 2]; },nil,1.5,true,true,"""",""true"",3, false,"""",""""];}";
-				name="ars_box_1";
+				init="call{[""AmmoboxInit"", this] spawn BIS_fnc_arsenal;}";
 			};
 			id=330;
 			type="Box_NATO_Equip_F";
