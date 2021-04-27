@@ -41,6 +41,8 @@ _noRoads_11 = [3864.55,13134.8] nearRoads 300;
 
 forbiddenStreets = _noRoads_1 + _noRoads_2 + _noRoads_3 + _noRoads_4 + _noRoads_5 + _noRoads_7 + _noRoads_8 + _noRoads_9 + _noRoads_10 + _noRoads_11;
 
+[]execVM "convoy\convoyInit.sqf";
+
 while {true} do {
 	[] spawn COC_fnc_manageStanding;
 	sleep 1;

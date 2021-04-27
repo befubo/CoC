@@ -1,9 +1,8 @@
 params ["_client","_target","_level"];
 
-_posCenter = [8277.57,7975.61];
+_posCenter = [7306.088,8348.544];
 
-_nearestRoad = _posCenter nearRoads 7000;
-_closeRoads = _posCenter nearRoads 1000;
+_nearestRoad = _posCenter nearRoads 6500;
 _allowedRoads = _nearestRoad - forbiddenStreets;
 _count = count _allowedRoads;
 
@@ -19,6 +18,9 @@ while {_startRoadInfo select 8} do {
 	_startRoadInfo = getRoadInfo _streetObject_start;
 };
 
+_startMarker = createMarker ["convoyStartPos", position _streetObject_start];
+"convoyStartPos" setMarkerType "hd_start";
+
 _distanceStatus = 0;
 _streetObject_end = "";
 while {_distanceStatus == 0} do {
@@ -27,22 +29,24 @@ while {_distanceStatus == 0} do {
 	_streetObject_end = _allowedRoads select _rand_end;
 	
 	_distance = _streetObject_start distance _streetObject_end;
-	if(_distance < 2000 && _distance > 6000) then {
+	if(_distance < 2000 OR _distance > 6000) then {
 		_distanceStatus = 0;
 	} else {
 		_distanceStatus = 1;
 	};
 };
 
+_endMarker = createMarker ["convoyEndPos", position _streetObject_end];
+"convoyEndPos" setMarkerType "hd_end";
+
 // GUARD VEHICLE
 _guardVehicle = "B_GEN_Offroad_01_gen_F";
 _driverClass = "B_Captain_Dwarden_F";
 _spawnGuardVehicle = createVehicle [_guardVehicle, position _streetObject_start, [], 0, "NONE"];
 
-_grp = createGroup _target;
-_guardDriver = _grp createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
+_grpGuard = createGroup _target;
+_guardDriver = _grpGuard createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
 _guardDriver moveInDriver _spawnGuardVehicle;
-_grp setFormation "FILE";
 
 _dirRoadGuard = (_startRoadInfo select 6) getDir (_startRoadInfo select 7);
 [_spawnGuardVehicle, _dirRoadGuard] remoteExec ["setDir", 0];
@@ -51,14 +55,22 @@ _connectedRoads = roadsConnectedTo _streetObject_start;
 _secondVehiclePos = _connectedRoads select 0;
 _secondVehiclePosInfo = getRoadInfo _secondVehiclePos;
 
+_distance1to2 = _streetObject_start distance _secondVehiclePos;
+while {_distance1to2 < 10} do {
+	_connectedRoads = roadsConnectedTo _secondVehiclePos;
+	_secondVehiclePos = _connectedRoads select 0;
+	_distance1to2 = _streetObject_start distance _secondVehiclePos;
+};
+
 sleep 5;
 
 // MAIN VEHICLE
-_mainVehicle = "B_GEN_Van_02_vehicle_F";
+_mainVehicle = "B_GEN_Offroad_01_gen_F";
 _driverClass = "B_Captain_Dwarden_F";
 _spawnMainVehicle = createVehicle [_mainVehicle, position _secondVehiclePos, [], 0, "NONE"];
 
-_mainDriver = _grp createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
+_grpMain = createGroup _target;
+_mainDriver = _grpMain createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
 _mainDriver moveInDriver _spawnMainVehicle;
 
 _dirRoadMain = (_secondVehiclePosInfo select 6) getDir (_secondVehiclePosInfo select 7);
@@ -68,98 +80,54 @@ _connectedRoads = roadsConnectedTo _secondVehiclePos;
 _thirdVehiclePos = _connectedRoads select 0;
 _thirdVehiclePosInfo = getRoadInfo _thirdVehiclePos;
 
+_distance2to3 = _secondVehiclePos distance _thirdVehiclePos;
+while {_distance2to3 < 10} do {
+	_connectedRoads = roadsConnectedTo _thirdVehiclePos;
+	_thirdVehiclePos = _connectedRoads select 0;
+	_distance2to3 = _secondVehiclePos distance _thirdVehiclePos;
+};
+
 sleep 5;
 
 // TRANSPORT VEHICLE
-_transportVehicle = "B_GEN_Van_02_transport_F";
+_transportVehicle = "B_GEN_Offroad_01_gen_F";
 _driverClass = "B_Captain_Dwarden_F";
 _spawnTransportVehicle = createVehicle [_transportVehicle, position _thirdVehiclePos, [], 0, "NONE"];
 
-_transportDriver = _grp createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
+_grpTransport = createGroup _target;
+_transportDriver = _grpTransport createUnit [_driverClass, [0,0,0], [], 0, "NONE"];
 _transportDriver moveInDriver _spawnTransportVehicle;
 
 _dirRoadTransport = (_thirdVehiclePosInfo select 6) getDir (_thirdVehiclePosInfo select 7);
 [_spawnTransportVehicle, _dirRoadTransport] remoteExec ["setDir", 0];
 
-
-sleep 5;
-
-{
-	_x setSkill ["general",1];
-} foreach units _grp;
-_grp setBehaviour "SAFE";
-
-
-/*
-
-
-0=[driver _spawnGuardVehicle] spawn
-	{
-	params ["_DriverGuardVehicle"];
-	while{alive _DriverGuardVehicle} do {
-		_DriverGuardVehicle forceWeaponFire["PoliceHorn", "PoliceHorn"];
-		sleep 1.5;
-		};
-	};
-
-0=[driver _spawnMainVehicle] spawn
-	{
-	params ["_DriverMainVehicle"];
-	while{alive _DriverMainVehicle} do {
-		_DriverMainVehicle forceWeaponFire["PoliceHorn", "PoliceHorn"];
-		sleep 1.5;
-		};
-	};
-
-0=[driver _spawnTransportVehicle] spawn
-	{
-	params ["_DriverTransportVehicle"];
-	while{alive _DriverTransportVehicle} do {
-		_DriverTransportVehicle forceWeaponFire["PoliceHorn", "PoliceHorn"];
-		sleep 1.5;
-		};
-	};
-
-*/
-
-[_spawnGuardVehicle,'CustomSoundController1',1,0.2] remoteExec ['BIS_fnc_setCustomSoundController'];
-_spawnGuardVehicle animate ["BeaconsStart", 1]; 
-_spawnMainVehicle animate ["lights_em_hide", 1]; 
-[_spawnTransportVehicle,'CustomSoundController1',1,0.2] remoteExec ['BIS_fnc_setCustomSoundController'];
-_spawnTransportVehicle animate ["lights_em_hide", 1]; 
-
-_spawnGuardVehicle setVariable ["speedLimit", 35];
-_spawnGuardVehicle forceFollowRoad true;
-_spawnMainVehicle forceFollowRoad true;
-_spawnTransportVehicle forceFollowRoad true;
-
-_wp1 = _grp addWaypoint [position _streetObject_end, 0];
-_wp1 setWaypointType "MOVE";
-_wp1 setWaypointSpeed "LIMITED";
-
-
-//roadsConnectedTo roadSegment
-
-//_info = getRoadInfo _road;
-//
-
-
-
-/*
-_grpCargo = createGroup _target;
-for "_i" from 1 to 6 do {
-	_spawnInfClass = selectRandom _infClasses;
-	_spawnCargoInf = _grpCargo createUnit [_infClasses, [0,0,0], [], 0, "NONE"];
-	_spawnCargoInf moveInAny _spawnInfVehicle;
-	sleep 0.2;
+_infClasses = ["I_E_Soldier_MP_F","I_E_Soldier_lite_F","I_E_Soldier_TL_F","I_E_soldier_M_F"]; 
+ 
+_grpCargo = createGroup west;
+for "_i" from 1 to 4 do { 
+ _grpTemp = createGroup west; 
+ _spawnInfClass = selectRandom _infClasses; 
+ _spawnCargoInf = _grpTemp createUnit [_spawnInfClass, [0,0,0], [], 0, "NONE"]; 
+[_spawnCargoInf] joinSilent _grpCargo; 
 };
 
+{
+	_x moveInCargo _spawnTransportVehicle;
+} foreach units _grpCargo;
 
+sleep 3;
 
+_spawnGuardVehicle animate ["BeaconsStart", 1]; 
+_spawnMainVehicle animate ["lights_em_hide", 1]; 
+_spawnTransportVehicle animate ["lights_em_hide", 1]; 
+//SIRENS
+//[_spawnTransportVehicle,'CustomSoundController1',1,0.2] remoteExec ['BIS_fnc_setCustomSoundController'];
+//[_spawnGuardVehicle,'CustomSoundController1',1,0.2] remoteExec ['BIS_fnc_setCustomSoundController'];
 
-//_wp1 = _grp addWaypoint [position _streetObject_end, 0];
-//_wp1 setWaypointSpeed "FULL";
-//_wp1 setWaypointType "MOVE";
+_spawnMainVehicle setConvoySeparation 15;
+_spawnTransportVehicle setConvoySeparation 15;
+
+_handle = [["convoyStartPos","convoyEndPos"],[_spawnGuardVehicle,_spawnMainVehicle,_spawnTransportVehicle], 35, 300, 1, "NORMAL", "CARELESS"] spawn DEVAS_ConvoyMove;
 
 
 
@@ -167,7 +135,7 @@ for "_i" from 1 to 6 do {
 
 
 
-
+/*
 
 //SPAWN ENDSTATION
 _endPos = getPos _streetObject_end;

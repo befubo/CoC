@@ -5,5 +5,6 @@ class COC {
         class spawnConvoi               {};
         class saveGear                  {};
         class manageStanding            {};
+        class spawnHVT                  {};
     };
 };

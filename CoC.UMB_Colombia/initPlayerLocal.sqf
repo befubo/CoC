@@ -189,6 +189,6 @@ while {true} do { //DEBUG AI STATUS
 	_wi = west getFriend resistance;
 	_ie = resistance getFriend east;
 	
-	hintsilent format ["BLUFOR: %1\nOPFOR: %2\nINDEP: %3\nBLU LAST: %4\nOPF LAST: %5\nGRE LAST: %6\nW-E: %7\nW-I: %8\nI-E: %9",_standing_blufor, "NaN", _standing_grenfor, _difference_blu, "NaN", _difference_gre, _we, _wi, _ie];
+	//hintsilent format ["BLUFOR: %1\nOPFOR: %2\nINDEP: %3\nBLU LAST: %4\nOPF LAST: %5\nGRE LAST: %6\nW-E: %7\nW-I: %8\nI-E: %9",_standing_blufor, "NaN", _standing_grenfor, _difference_blu, "NaN", _difference_gre, _we, _wi, _ie];
 	sleep 0.1;
 };
